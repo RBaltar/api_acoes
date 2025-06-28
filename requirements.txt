@@ -1,0 +1,16 @@
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+sqlalchemy==2.0.30
+pydantic==2.7.4
+pydantic-settings==2.3.4
+python-dotenv==1.0.1
+
+psycopg2-binary
+
+schedule
+requests
+pandas
+beautifulsoup4
+matplotlib
+
+jupyterlab
