@@ -1,10 +1,7 @@
-# popular_dados.py
-
 import uuid
 from datetime import date
 from decimal import Decimal
 
-# Importa a sessão do banco e todos os modelos necessários
 from app.db.database import SessionLocal
 from app.db.models import Usuario, Ticker, Indice, EventoCorporativo
 
@@ -16,8 +13,6 @@ def popular_dados_iniciais():
     print("Iniciando a inserção de dados iniciais...")
 
     try:
-        # --- 1. Criar um Usuário de Teste com Chave de API ---
-        # Verifica se já existe um usuário de teste para não criar duplicado
         usuario_existente = db.query(Usuario).filter(Usuario.email == "usuario@teste.com").first()
         if not usuario_existente:
             api_key_unica = str(uuid.uuid4())
@@ -32,7 +27,6 @@ def popular_dados_iniciais():
         else:
             print("ℹ️  Usuário de teste já existe. Chave de API:", usuario_existente.api_key)
 
-        # --- 2. Garantir que Tickers de Exemplo existam ---
         tickers_para_verificar = ["PETR4", "VALE3"]
         for ticker_code in tickers_para_verificar:
             ticker_existente = db.query(Ticker).filter(Ticker.codigo == ticker_code).first()
@@ -41,7 +35,6 @@ def popular_dados_iniciais():
                 db.add(novo_ticker)
                 print(f"✅ Ticker de exemplo '{ticker_code}' criado.")
 
-        # --- 3. Criar os Índices Principais ---
         indice_ibov = db.query(Indice).filter(Indice.nome == "IBOV").first()
         if not indice_ibov:
             ibov = Indice(nome="IBOV", valor_atual=Decimal("120000.00"), variacao_dia=Decimal("0.5"))
@@ -54,8 +47,6 @@ def popular_dados_iniciais():
             db.add(ifix)
             print("✅ Índice IFIX de exemplo criado.")
 
-        # --- 4. Criar Eventos Corporativos de Exemplo ---
-        # Para garantir que não haja duplicatas, deletamos os antigos antes de inserir
         db.query(EventoCorporativo).filter(EventoCorporativo.ticker_codigo.in_(tickers_para_verificar)).delete(synchronize_session=False)
 
         eventos = [
@@ -66,7 +57,6 @@ def popular_dados_iniciais():
         db.add_all(eventos)
         print("✅ Eventos corporativos de exemplo inseridos.")
 
-        # Salva todas as alterações no banco de dados de uma vez
         db.commit()
         print("\nDados iniciais populados com sucesso no banco de dados!")
 
@@ -74,7 +64,6 @@ def popular_dados_iniciais():
         print(f"\n❌ Ocorreu um erro ao popular o banco: {e}")
         db.rollback()
     finally:
-        # Garante que a conexão seja sempre fechada
         db.close()
 
 if __name__ == "__main__":

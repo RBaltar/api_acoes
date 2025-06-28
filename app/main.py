@@ -6,14 +6,12 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import select
 
-# Importações da nossa aplicação
 from app.core.config import settings
 from app.db import database, models
-from app.api.v1.endpoints import acoes, usuarios, logs # <-- Importa todos os routers
+from app.api.v1.endpoints import acoes, usuarios, logs
 from app.db.database import SessionLocal
 from app.db.models import Usuario
 
-# --- Lógica de Rate Limiting ---
 requests_log = defaultdict(list)
 
 def rate_limit_dependency(request: Request):
@@ -29,14 +27,12 @@ def rate_limit_dependency(request: Request):
         )
     requests_log[ip].append(now)
 
-# --- Criação da Aplicação FastAPI ---
 app = FastAPI(
     title="API de Ações da Bolsa",
     description="Uma API de alta performance para consulta de dados do mercado financeiro.",
     version="1.0.0"
 )
 
-# --- Middleware para Logging ---
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     start_time = time.time()
@@ -76,7 +72,6 @@ async def log_requests(request: Request, call_next):
         db_log.close()
     return response
 
-# --- Inclusão dos Routers da API ---
 app.include_router(
     acoes.router,
     prefix="/api/v1/acoes",

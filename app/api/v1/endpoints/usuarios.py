@@ -11,8 +11,6 @@ router = APIRouter()
 
 @router.post("/", response_model=usuario_schema.UsuarioOut, status_code=status.HTTP_201_CREATED, summary="Criar um novo Usuário")
 def create_user(user: usuario_schema.UsuarioCreate, db: Session = Depends(get_db)):
-    # A autenticação não foi adicionada aqui para permitir a criação do primeiro usuário
-    # Em um sistema real, esta rota poderia ser protegida ou pública.
     return usuario_service.create_usuario(db=db, user=user)
 
 @router.get("/", response_model=List[usuario_schema.UsuarioOut], summary="Listar todos os Usuários")

@@ -35,7 +35,7 @@ def create_usuario(db: Session, user: UsuarioCreate) -> models.Usuario:
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    print(f"Novo usuário criado: {db_user.email}, Chave API: {db_user.api_key}") # Log útil no terminal
+    print(f"Novo usuário criado: {db_user.email}, Chave API: {db_user.api_key}")
     return db_user
 
 def update_usuario(db: Session, user_id: int, user_update: UsuarioUpdate) -> Optional[models.Usuario]:

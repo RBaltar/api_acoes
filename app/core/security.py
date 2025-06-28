@@ -13,9 +13,7 @@ async def get_current_user(
     api_key: str = Security(api_key_header),
     db: Session = Depends(database.get_db)
 ) -> models.Usuario:
-    # Requisito 12: Permite desabilitar a autenticação para desenvolvimento
     if not settings.API_SAFE_MODE:
-        # Retorna um usuário "dummy" se o modo seguro estiver desativado
         return models.Usuario(id=0, nome="dev_user", email="dev@test.com", api_key="dev_key", ativo=True)
 
     if api_key is None:

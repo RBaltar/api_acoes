@@ -9,12 +9,10 @@ import io
 import sys
 from contextlib import redirect_stdout
 
-# Importações para a funcionalidade de Gráfico
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-# Importa a função de coleta do nosso script
 from app.scripts.collect_data import run_collection
 
 class StockApp:
@@ -27,13 +25,10 @@ class StockApp:
         self.root.title("Painel de Controle - API de Ações")
         self.root.geometry("750x650")
 
-        # --- Configurações da API ---
         self.base_url = "http://127.0.0.1:8000/api/v1/"
-        # ❗ IMPORTANTE: Coloque aqui uma chave de API válida
         self.api_key = "SUA_CHAVE_DE_API_AQUI"
         self.headers = {"X-API-Key": self.api_key}
 
-        # --- Estilo e Estrutura Principal ---
         style = ttk.Style(self.root)
         style.theme_use("clam")
         
@@ -172,7 +167,6 @@ class StockApp:
             self.root.after(0, self._atualizar_resultado, f"Erro de conexão com a API: {e}")
             return False, None
 
-    # --- Workers para Ações, Gráficos, Coleta, etc. ---
     def _worker_buscar_ticker(self):
         ticker = self.ticker_entry1.get().strip().upper()
         if ticker: self._chamar_api("GET", "acoes/", ticker)
@@ -217,7 +211,6 @@ class StockApp:
     def _worker_listar_logs_coleta(self):
         self._chamar_api("GET", "logs/", "coleta")
     
-    # --- WORKERS DE GRÁFICO (CORRIGIDOS) ---
     def _worker_buscar_grafico(self):
         ticker = self.ticker_entry1.get().strip().upper()
         if not ticker: return
@@ -244,7 +237,6 @@ class StockApp:
         except requests.exceptions.RequestException as e:
             self.root.after(0, self._atualizar_resultado, f"Erro de conexão com a API: {e}")
     
-    # --- Lógica e Workers para a Aba de Usuários ---
     def _on_user_select(self, event):
         selected_items = self.user_tree.selection()
         if not selected_items: return

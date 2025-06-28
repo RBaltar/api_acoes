@@ -1,5 +1,3 @@
-# app/schemas/log.py
-
 from pydantic import BaseModel
 from datetime import datetime
 
